@@ -12,7 +12,7 @@ class SudokuSolver
     @peers    =  AppHelper.peers(@units, @squares)
   end
 
-  def solve(grid)
+  def parse_grid(grid)
     values = Hash.new
     @squares.each { |s| values[s] = @digits }
     AppHelper.grid_values(grid, @squares).each { |key, val| assign(values, key, val) if @digits.include? val }
@@ -67,8 +67,8 @@ class SudokuSolver
         row += values[r+c].center(width)
         ('36'.include? c) ? row += '|' : row += ''
       }
-      p row
-      p grid_line if 'CF'.include? r
+      puts row
+      puts grid_line if 'CF'.include? r
     }
   end
 
@@ -78,4 +78,4 @@ end
 grid1  = '003020600900305001001806400008102900700000008006708200002609500800203009005010300'
 
 sudoku_solver = SudokuSolver.new
-sudoku_solver.solve(grid1)
+sudoku_solver.parse_grid(grid1)
