@@ -11,8 +11,8 @@ module AppHelper
 
   def self.unitlist(rows, cols)
     cols.chars.map {|col| cross_prod(rows,col)} +
-        rows.chars.map {|row| cross_prod(row,cols)} +
-        group(rows).product(group(cols)).map {|el| cross_prod(el[0],el[1])}
+    rows.chars.map {|row| cross_prod(row,cols)} +
+    group(rows).product(group(cols)).map {|el| cross_prod(el[0],el[1])}
   end
 
   #FIXME more efficient way
@@ -31,6 +31,24 @@ module AppHelper
 
   def self.grid_values(grid, squares)
     squares.zip(grid.split('')).to_h
+  end
+
+  def self.display(values,squares,rows,cols)
+    len = []
+    squares.each { |s| len << values[s].length }
+    width = 1 + len.max
+    grid_line = ['-'*(width*3), '-'*(width*3), '-'*(width*3)].map { |k| "#{k}" }.join("+")
+    row = ''
+
+    rows.chars { |r|
+      row.clear
+      cols.chars { |c|
+        row += values[r+c].center(width)
+        ('36'.include? c) ? row += '|' : row += ''
+      }
+      puts row
+      puts grid_line if 'CF'.include? r
+    }
   end
 
 end
