@@ -16,16 +16,14 @@ class SudokuSolver
     values = Hash.new
     @squares.each { |s| values[s] = @digits }
     AppHelper.grid_values(grid, @squares).each { |key, val| assign(values, key, val) if @digits.include? val }
-    pretty_print(values)
-  end
-
-################ Constraint Propagation ################
-
-  def assign(values, s, d)
-    values[s].sub(d,'').chars { |d2| eliminate(values, s, d2) }
     values
   end
 
+  ################ Constraint Propagation ################
+
+  def assign(values, s, d)
+    (values[s].sub(d,'').chars.all? { |d2| eliminate(values, s, d2) }) ? values : false
+  end
 
   def eliminate(values, s, d)
     return values unless values[s].include? d
@@ -34,48 +32,42 @@ class SudokuSolver
       return false
       # (1) If a square s is reduced to one value d2, then eliminate d2 from the peers.
     elsif values[s].length == 1
-      d2 = values[s]
-      @peers[s].each { |s2| eliminate(values, s2, d2) }
-      #return false
+      return false unless @peers[s].each.all? { |s2| eliminate(values, s2, values[s]) }
     end
     # (2) If a unit u is reduced to only one place for a value d, then put it there.
     dplaces = [ ]
     @units[s].each { |u|
+      dplaces.clear
       u.each { |el| dplaces << el if values[el].include? d }
+      #puts dplaces
       if dplaces.length == 0
         return false
       elsif dplaces.length == 1
         # d can only be in one place in unit; assign it there
-        assign(values, dplaces[0], d)
+        return false unless assign(values, dplaces[0], d)
       end
     }
     values
   end
 
-################ Display as 2-D grid ################
+  ################ Search ################
 
-  def pretty_print(values)
-    len = []
-    @squares.each { |s| len << values[s].length }
-    width = 1 + len.max
-    grid_line = ['-'*(width*3), '-'*(width*3), '-'*(width*3)].map { |k| "#{k}" }.join("+")
-    row = ''
-
-    @rows.chars { |r|
-      row.clear
-      @cols.chars { |c|
-        row += values[r+c].center(width)
-        ('36'.include? c) ? row += '|' : row += ''
-      }
-      puts row
-      puts grid_line if 'CF'.include? r
-    }
+  def solve(grid)
+    AppHelper.display(search(parse_grid(grid)),@squares,@rows,@cols)
   end
 
+  def search(values)
+    return false unless values
+    return values if @squares.all? { |s| values[s].length == 1 }
+    min_s = values.key(values.each_value.select{|s| s if s.length > 1}.min_by(&:length))
+    vals = []
+    values[min_s].chars { |d|
+      vals.clear
+      vals << search(assign(values.dup(), min_s, d) )
+      vals.flatten.each {|el| return el if el.instance_of? Hash}
+    }
+
+
+  end
 
 end
-
-grid1  = '003020600900305001001806400008102900700000008006708200002609500800203009005010300'
-
-sudoku_solver = SudokuSolver.new
-sudoku_solver.parse_grid(grid1)
