@@ -1,5 +1,5 @@
 # Sudoku-Solver
-Ruby implementation of the Peter Norving's sudoku solving algorithm. Actually seems to perform like the native Python implementation; On an Intel I7 2600K solves the hard puzzle below in 1' and 15". There is also a little test suite based on the one found in the original article. For a more detailed point of view you should read [This](http://norvig.com/sudoku.html)
+Ruby implementation of the Peter Norvig's sudoku solving algorithm. Actually seems to perform like the native Python implementation; On an Intel I7 2600K solves the hard puzzle below in 1' and 15". There is also a little test suite based on the one found in the original article. For a more detailed point of view you should read [This](http://norvig.com/sudoku.html)
 
 #Code Sample 
 
