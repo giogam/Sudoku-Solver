@@ -14,8 +14,3 @@ require_relative 'sudoku_solver'
 
   sudoku_solver.solve(hard1)
 ```
-# Terminal Example
-
-![alt text][logo]
-
-[logo]: https://squjdw.bl3302.livefilestore.com/y3mk4_iCAj48FHvHgIWg59EZGWZoufzsMRZnee3fZCCuC04-HNSuQmLHYbOlEd5ubsnW1QbiCr-H7WCZLU745VZf1KywJ_lcemGIeP7oMiT0172YUfgIcXAVFLYzYzSf-JFAkZuJs-A9MW3Mo20-uesAbGyb3YeDbuqZWIiaEMAjJ8?width=449&height=146&cropmode=none "Logo Title Text 2"
